@@ -1,0 +1,33 @@
+name: verify
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: python syntax check
+        run: python3 -m py_compile md2pdf.py tests/validate_pdf.py
+
+      - name: generate PDF from the fixture
+        run: python3 md2pdf.py tests/sample.md -o /tmp/sample.pdf
+
+      - name: validate PDF structure
+        run: python3 tests/validate_pdf.py /tmp/sample.pdf
+
+      - name: regression - second run must also validate
+        run: python3 md2pdf.py tests/sample.md -o /tmp/again.pdf && python3 tests/validate_pdf.py /tmp/again.pdf
+
+      - name: validator rejects a corrupt file
+        run: |
+          printf 'not a pdf at all' > /tmp/broken.pdf
+          if python3 tests/validate_pdf.py /tmp/broken.pdf; then
+            echo "validator wrongly accepted a broken file"
+            exit 1
+          fi
+          echo "validator correctly rejected a broken file"
