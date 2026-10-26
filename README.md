@@ -1,5 +1,8 @@
 # md2pdf
 
+[![verify](https://github.com/Zhiyilang/md2pdf/actions/workflows/verify.yml/badge.svg)](https://github.com/Zhiyilang/md2pdf/actions/workflows/verify.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+
 **Turn a Markdown file into a real PDF. Zero dependencies. No pandoc, no LaTeX, no `pip install`.**
 
 Python standard library only. A single ~450-line file that writes a valid
